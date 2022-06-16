@@ -8,6 +8,9 @@
 #include "camera.hpp"
 #include "primitives/sphere.hpp"
 #include "primitives/plane.hpp"
+#include "primitives/cylinder.hpp"
+#include "primitives/cone.hpp"
+#include "primitives/torus.hpp"
 #include "lights/pointlight.hpp"
 #include "hitrecord.h"
 

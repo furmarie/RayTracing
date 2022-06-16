@@ -20,7 +20,7 @@ namespace fRT {
 			qbVector<double>& intPoint,
 			qbVector<double>& localNormal,
 			qbVector<double>& localColour
-		) const override;
+		) override;
 
 	private:
 

@@ -32,6 +32,24 @@ bool CApp::OnInit() {
 		// Render the scene
 		m_scene.Render(m_image);
 
+		// Setup a texture
+		//fRT::texture::checker testTex;
+		//testTex.setTransform(qbVector<double>({0.3, 0.0}), PI / 4, qbVector<double>({4, 4}));
+
+		// Render the texture
+		//for(int y = 0; y < IMG_HEIGHT; y++) {
+		//	for(int x = 0; x < IMG_WIDTH; x++) {
+		//		// Compute u, v
+		//		double u = (double) x / ((double) IMG_WIDTH / 2.0) - 1.0;
+		//		double v = (double) y / ((double) IMG_HEIGHT / 2.0) - 1.0;
+		//		qbVector<double> uvPoint ({u, v});
+		//		auto pixelColour = testTex.getColour(uvPoint);
+
+		//		// Update pixel
+		//		m_image.SetPixel(x, y, pixelColour[0], pixelColour[1], pixelColour[2]);
+		//	}
+		//}
+
 		// Display image
 		m_image.Display();
 

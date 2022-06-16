@@ -19,9 +19,17 @@ namespace fRT {
 		// Construct from a pair of matrices
 		GTform(const matrix& fwd, const matrix& bck);
 
+		// Construct from three vector
+		GTform(
+			const vec3& translation,
+			const vec3& rotation,
+			const vec3& scale
+		);
+
 		// Function to set translation, rotation and scale components
 		// Make sure no component is zero in scale vector
-		void setTransform(const vec3& translation,
+		void setTransform(
+			const vec3& translation,
 			const vec3& rotation,
 			const vec3& scale
 		);

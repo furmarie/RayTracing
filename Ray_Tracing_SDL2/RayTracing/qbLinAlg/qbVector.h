@@ -51,6 +51,9 @@ public:
 	T GetElement(int index) const;
 	void SetElement(int index, T value);
 
+	// Function to resize vector
+	void resize(int numDims);
+
 	// Functions to perform computations on the vector.
 	// Return the length of the vector.
 	T norm();
@@ -133,6 +136,12 @@ T qbVector<T>::GetElement(int index) const {
 template <class T>
 void qbVector<T>::SetElement(int index, T value) {
 	m_vectorData[index] = value;
+}
+
+template <class T>
+void qbVector<T>::resize(int numDims) {
+	m_nDims = numDims;
+	m_vectorData.resize(m_nDims);
 }
 
 /* **************************************************************************************************

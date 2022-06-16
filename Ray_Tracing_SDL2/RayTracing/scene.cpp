@@ -4,6 +4,7 @@
 #include "ctpl.h"
 #include "scene.hpp"
 #include "materials/simplematerial.hpp"
+#include "textures/checker.hpp"
 
 
 void printVec(const qbVector<double>& vec) {
@@ -21,109 +22,130 @@ namespace fRT {
 	// Default constructor
 	Scene::Scene() {
 		// Create some materials
-		auto testMaterial1 = std::make_shared<simpleMaterial>();
+		auto yellowDiffuse = std::make_shared<simpleMaterial>();
+		auto blueDiffuse = std::make_shared<simpleMaterial>();
+		auto goldMetal = std::make_shared<simpleMaterial>();
 		auto testMaterial2 = std::make_shared<simpleMaterial>();
 		auto testMaterial3 = std::make_shared<simpleMaterial>();
 		auto floorMaterial = std::make_shared<simpleMaterial>();
 
 		// Set material params
-		testMaterial1->m_baseColour = vec3({ 0.35, 0.9, 0.8 });
-		testMaterial1->m_reflectivity = 0.1;
-		testMaterial1->m_shininess = 10.0;
+		blueDiffuse->m_baseColour = vec3({ 0.2, 0.2, 0.81 });
+		blueDiffuse->m_reflectivity = 0.05;
+		blueDiffuse->m_shininess = 5.0;
 
-		testMaterial2->m_baseColour = vec3({ 0.2, 0.8, 0.3 });
-		testMaterial2->m_reflectivity = 0.75;
-		testMaterial2->m_shininess = 10.0;
+		yellowDiffuse->m_baseColour = vec3({ 0.8, 0.8, 0.2 });
+		yellowDiffuse->m_reflectivity = 0.05;
+		yellowDiffuse->m_shininess = 5.0;
 
-		testMaterial3->m_baseColour = vec3({ 1.0, 0.8, 0.0});
-		testMaterial3->m_reflectivity = 0.25;
-		testMaterial3->m_shininess = 10.0;
-		
-		floorMaterial->m_baseColour = vec3({1.0, 1.0, 1.0});
+		goldMetal->m_baseColour = vec3({0.8, 0.8, 0.3});
+		goldMetal->m_reflectivity = 0.25;
+		goldMetal->m_shininess = 20.0;
+
+
+		floorMaterial->m_baseColour = vec3({ 1.0, 1.0, 1.0 });
 		floorMaterial->m_reflectivity = 0.5;
 		floorMaterial->m_shininess = 0.0;
 
 
 
 		// Configure the camera
-		m_camera.setPosition(qbVector<double>{std::vector<double> {0, -10, -1}});
+		m_camera.setPosition(qbVector<double>{std::vector<double> {0, -17, -4}});
 		m_camera.setLookAt(qbVector<double>{std::vector<double> {0.0, 0.0, 0.0}});
 		m_camera.setUp(qbVector<double>{std::vector<double> {0.0, 0.0, 1.0}});
 		m_camera.setHorzSize(0.25);
 		m_camera.setAspectRatio(16.0 / 9.0);
 		m_camera.UpdateCameraGeometry();
 
-		const double mx = 255.0;
+		// Create some textures
+		auto floorTexture = std::make_shared<texture::checker>();
+		floorTexture->setTransform(vec3({0.0, 0.0}), 0.0, vec3({10.0, 10.0}));
 
-		// Test sphere
-		m_world.push_back(std::make_shared<sphere>());
-		m_world.push_back(std::make_shared<sphere>());
-		m_world.push_back(std::make_shared<sphere>());
+		// Assign to material
+		floorMaterial->assignTexture(floorTexture);
+		yellowDiffuse->assignTexture(floorTexture);
 
-		// Construct a test plane
-		m_world.push_back(std::make_shared<plane>());
-		m_world.at(3)->m_baseColour = vec3({ 1,1,1 });
+		// Construct a test cylinder
+		auto cylinder1 = std::make_shared<cylinder>();
 
-		 //Define transform for plane
-		GTform planeMat;
-		planeMat.setTransform(
-			vec3({ 0, 0, 0.7 }),
-			vec3({ 0, 0.0, 0 }),
-			vec3({ 4.0, 4.0, 4.0 })
+		// Define a transform for cylinder
+		GTform testMatCyl;
+		testMatCyl.setTransform(
+			vec3({ -1, 0.0, 0.0 }),
+			vec3({ -PI / 4,0, 0.0 }),
+			vec3({ 0.5, 0.5, 1.0 })
 		);
-		m_world.at(3)->setTransformMatrix(planeMat);
-
-		// Modify the spheres
-		GTform testMat1, testMat2, testMat3;
-		testMat1.setTransform(
-			vec3({ -1.5, 0, 0 }),
-			vec3({ 0, 0.0, 0.0 }),
-			vec3({ 0.5, 0.5, 0.5 })
+		//cylinder1->setTransformMatrix(testMatCyl);
+		cylinder1->setTransformMatrix(
+			GTform(
+				vec3({ 0, 0, -0.6 }),
+				vec3({ -PI / 4, -PI / 4, 0.0 }),
+				vec3({ 0.4, 0.4, 3.0 })
+			)
 		);
-		testMat2.setTransform(
-			vec3({ 0.0, 0.0, 0.0 }),
-			vec3({ 0.0, 0.0, 0.0 }),
-			vec3({ 0.5, 0.5, 0.5 })
-		);
-		testMat3.setTransform(
-			vec3({ 1.5, 0, 0 }),
-			vec3({ 0, 0, 0 }),
-			vec3({ 0.5, 0.5, 0.5 })
-		);
-		m_world.at(0)->setTransformMatrix(testMat1);
-		m_world.at(1)->setTransformMatrix(testMat2);
-		m_world.at(2)->setTransformMatrix(testMat3);
+		cylinder1->assignMaterial(blueDiffuse);
 
-		m_world.at(0)->m_baseColour = vec3({ 0.3, 0.9, 0.85 });
-		m_world.at(1)->m_baseColour = vec3({ 0.8, 0.2, 0.6 });
-		m_world.at(2)->m_baseColour = vec3({ 0.8, 0.4, 0.2 });
+		m_world.push_back(cylinder1);
 
-		// Assign material to objects
-		m_world.at(0)->assignMaterial(testMaterial2);
-		m_world.at(1)->assignMaterial(testMaterial1);
-		m_world.at(2)->assignMaterial(testMaterial3);
-		m_world.at(3)->assignMaterial(floorMaterial);
+		auto cone1 = std::make_shared<cone>();
+		cone1->setTransformMatrix(
+			GTform(
+				vec3({ 1, 0, 0 }),
+				vec3({ 0.0, 0, 0 }),
+				vec3({ 0.5, 0.5, 1 })
+			)
+		);
+		cone1->assignMaterial(yellowDiffuse);
+
+		//m_world.push_back(cone1);
+
+		//m_world.push_back(std::make_shared<sphere>());
+		//m_world[0]->assignMaterial(blueDiffuse);
+
+		// Create a floor
+		auto floor = std::make_shared<plane>();
+		auto bb = GTform(vec3({ 0.0, 0.0, 1.0 }), vec3({ 0.0, 0.0, 0.0 }), vec3({ 16, 16, 1 }));
+		floor->setTransformMatrix(bb);
+		floor->assignMaterial(floorMaterial);
+		
+
+		m_world.push_back(floor);
+
+		// Create a torus
+		auto torus1 = std::make_shared<torus>();
+		torus1->setTransformMatrix(
+			GTform(
+				vec3({ 0, 0, -0.6 }),
+				vec3({ -PI / 4, -PI/4, 0.0 }),
+				vec3({ 1, 1, 1 })
+			)
+		);
+		torus1->m_baseColour = vec3({1.0,1.0,1.0});
+		torus1->assignMaterial(goldMetal);
+
+		m_world.push_back(torus1);
+
 
 		// Test light
 		m_lights.push_back(std::make_shared<pointLight>(pointLight()));
-		m_lights.at(0)->m_location = qbVector<double>({ -5.0, -10.0, -4.0 });
-		m_lights.at(0)->m_colour = qbVector<double>({ 1.0, 0.0, 0.0 });
+		m_lights.at(0)->m_location = qbVector<double>({ -5.0, -10.0, -5.0 });
+		m_lights.at(0)->m_colour = qbVector<double>({ 1.0, 1.0, 1.0 });
 
 		m_lights.push_back(std::make_shared<pointLight>(pointLight()));
-		m_lights.at(1)->m_location = vec3({ 5, -10, -4 });
-		m_lights.at(1)->m_colour = qbVector<double>({ 0.0, 1.0, 0.0 });
+		m_lights.at(1)->m_location = vec3({ 5, -10, -5 });
+		m_lights.at(1)->m_colour = qbVector<double>({ 1.0, 1.0, 1.0 });
 
 		m_lights.push_back(std::make_shared<pointLight>(pointLight()));
-		m_lights.at(2)->m_location = vec3({ 0, -10, -4 });
-		m_lights.at(2)->m_colour = vec3({ 0.0, 0.0, 1.0 });
+		m_lights.at(2)->m_location = vec3({ 0, -10, -5 });
+		m_lights.at(2)->m_colour = qbVector<double>({ 1.0, 1.0, 1.0 });
 
 	}
 
 	// Function to actually render
 	bool Scene::Render(fImage& outputImage) {
 		// Create a thread pool
-		ctpl::thread_pool threads(6);
-		
+		ctpl::thread_pool threads(1);
+
 
 		// Get dimensions of image
 		int xSize = outputImage.getxSize();
@@ -158,7 +180,6 @@ namespace fRT {
 
 			bool intersectionFound = castRay(cameraRay, record);
 
-
 			// Compute illumination for closest object if intersectionFound
 			if(intersectionFound) {
 				// Check if the closest object has a material
@@ -171,19 +192,36 @@ namespace fRT {
 				}
 				else {
 					// Use basic method to compute colour
-					vec3 matColour = materialBase::computeDiffuseColour(m_world, m_lights, record);
+					vec3 matColour = materialBase::computeDiffuseColour(m_world, m_lights, record, record.obj->m_baseColour);
 					outputImage.SetPixel(x, y, matColour[0], matColour[1], matColour[2]);
-
 				}
 			}
 		};
 
 		auto do_line = [&](int id, int y) -> void {
 			for(int x = 0; x < xSize; x++) {
-				pixelFunc(1, x, y);
+				pixelFunc(id, x, y);
 			}
 		};
 
+		auto do_length = [&](int id, int strt, int en) {
+			for(int y = strt; y <= en; y++) {
+				do_line(id, y);
+			}
+		};
+
+		std::vector<std::thread> thread_list;
+
+		int stepsize = 50;
+		//for(int i = 0; i < ySize; i += stepsize) {
+		//	do_length(1, i, std::min(ySize - 1, i + stepsize - 1));
+		//	//thread_list.push_back(std::thread(do_length, 1, i, std::min(ySize - 1, i + stepsize - 1)));
+		//	//threads.push(do_length, i, std::min(ySize - 1, i + stepsize - 1));
+		//}
+
+		//for(auto& th : thread_list) {
+		//	th.join();
+		//}
 
 		for(int y = 0; y < ySize; y++) {
 			std::cerr << "Lines done :" << y + 1 << "/" << ySize << std::endl;
@@ -191,9 +229,8 @@ namespace fRT {
 				// Push function call to thread list
 				threads.push(pixelFunc, x, y);
 
-
 			}
-			
+
 			// Push line to thread pool
 			//threads.push(do_line, y);
 		}

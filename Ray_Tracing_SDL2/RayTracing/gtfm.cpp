@@ -22,7 +22,17 @@ namespace fRT {
 		m_bcktfm = bck;
 	}
 
-	void GTform::setTransform(const vec3& translation,
+	// Construct from three vector
+	GTform::GTform(
+		const vec3& translation,
+		const vec3& rotation,
+		const vec3& scale
+	) {
+		setTransform(translation, rotation, scale);
+	}
+
+	void GTform::setTransform(
+		const vec3& translation,
 		const vec3& rotation,
 		const vec3& scale
 	) {

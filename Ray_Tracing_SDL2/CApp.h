@@ -1,11 +1,11 @@
-#pragma once
-
 #ifndef CAPP_H
 #define CAPP_H
 #include<SDL.h>
 #include "RayTracing/fImage.hpp"
 #include "RayTracing/scene.hpp"
 #include "RayTracing/camera.hpp"
+#include "RayTracing/textures/flat.hpp"
+#include "RayTracing/textures/checker.hpp"
 #include "consts.h"
 
 

@@ -21,7 +21,7 @@ namespace fRT {
 		qbVector<double>& intPoint,
 		qbVector<double>& localNormal,
 		qbVector<double>& localColour
-	) const {
+	) {
 		// Copy the ray and apply backwards transform
 		ray bckRay = m_transformMatrix.apply(r, fRT::BCKTFRM);
 
@@ -79,7 +79,11 @@ namespace fRT {
 
 		// Return base colour
 		localColour = m_baseColour;
-		
+
+		// Store the uv coordinates for possible later use
+		m_uvPoint[0] = u;
+		m_uvPoint[1] = v;
+
 		return true;
 	}
 

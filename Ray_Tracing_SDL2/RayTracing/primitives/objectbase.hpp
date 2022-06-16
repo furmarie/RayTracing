@@ -4,12 +4,12 @@
 #include "../qbLinAlg/qbVector.h"
 #include "../ray.hpp"
 #include "../gtfm.hpp"
+#include "../../consts.h"
 
 namespace fRT {
 	// Forward declare the material base class
 	// Will be overriden later
 	class materialBase;
-
 
 	class objectBase {
 	public:
@@ -23,10 +23,10 @@ namespace fRT {
 			qbVector<double>& intPoint,
 			qbVector<double>& localNormal,
 			qbVector<double>& localColour
-		) const ;
+		);
 
 		// Function to set the transform matrix
-		void setTransformMatrix(GTform& transformMat);
+		void setTransformMatrix(GTform transformMat);
 
 		// Function to test whether two floating-points are close to being equal
 		bool isClose(const double f1, const double f2) const;
@@ -47,6 +47,10 @@ namespace fRT {
 
 		// Flag to indicate whether object has material or not
 		bool m_hasMaterial = false;
+
+	public:
+		// Store the uv coordinates from a detected intersection
+		qbVector<double> m_uvPoint {2};
 	};
 };
 

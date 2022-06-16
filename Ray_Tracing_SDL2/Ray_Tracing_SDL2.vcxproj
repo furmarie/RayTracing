@@ -73,22 +73,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\rahul\VCLIB\SDL2-2.0.22\include</IncludePath>
     <LibraryPath>C:\Users\rahul\VCLIB\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\rahul\VCLIB\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\rahul\VCLIB\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -162,6 +162,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RayTracing\primitives\algebra.cpp" />
+    <ClCompile Include="RayTracing\primitives\Quartic\quartic.cpp" />
+    <ClCompile Include="RayTracing\textures\checker.cpp" />
+    <ClCompile Include="RayTracing\textures\flat.cpp" />
+    <ClCompile Include="RayTracing\primitives\cone.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CApp.cpp" />
     <ClCompile Include="RayTracing\camera.cpp" />
@@ -177,9 +182,16 @@
     <ClCompile Include="RayTracing\primitives\sphere.cpp" />
     <ClCompile Include="RayTracing\ray.cpp" />
     <ClCompile Include="RayTracing\scene.cpp" />
+    <ClCompile Include="RayTracing\textures\texturebase.cpp" />
+    <ClCompile Include="RayTracing\primitives\torus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CApp.h" />
+    <ClInclude Include="RayTracing\primitives\algebra.h" />
+    <ClInclude Include="RayTracing\primitives\Quartic\quartic.h" />
+    <ClInclude Include="RayTracing\textures\checker.hpp" />
+    <ClInclude Include="RayTracing\textures\flat.hpp" />
+    <ClInclude Include="RayTracing\primitives\cone.hpp" />
     <ClInclude Include="consts.h" />
     <ClInclude Include="RayTracing\camera.hpp" />
     <ClInclude Include="RayTracing\ctpl.h" />
@@ -197,6 +209,8 @@
     <ClInclude Include="RayTracing\ray.hpp" />
     <ClInclude Include="RayTracing\scene.hpp" />
     <ClInclude Include="RayTracing\threadpool.h" />
+    <ClInclude Include="RayTracing\textures\texturebase.hpp" />
+    <ClInclude Include="RayTracing\primitives\torus.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

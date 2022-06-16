@@ -4,7 +4,7 @@
 #include "objectbase.hpp"
 
 namespace fRT {
-	class plane : public fRT::objectBase {
+	class plane : public objectBase {
 
 	public:
 		// Default constructor
@@ -19,7 +19,7 @@ namespace fRT {
 			qbVector<double>& intPoint,
 			qbVector<double>& localNormal,
 			qbVector<double>& localColour
-		) const override;
+		) override;
 
 	private:
 

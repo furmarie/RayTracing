@@ -19,12 +19,12 @@ namespace fRT {
 		qbVector<double>& intPoint,
 		qbVector<double>& localNormal,
 		qbVector<double>& localColour
-	) const {
+	) {
 		return false;
 	}
 
 	// Function to set transform matrix
-	void objectBase::setTransformMatrix(GTform& transformMat) {
+	void objectBase::setTransformMatrix(GTform transformMat) {
 		m_transformMatrix = transformMat;
 	}
 

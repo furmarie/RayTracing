@@ -17,7 +17,7 @@ namespace fRT {
 		qbVector<double>& intPoint,
 		qbVector<double>& localNormal,
 		qbVector<double>& localColour
-	) const {
+	) {
 		// Copy ray and apply backward transform on ray to transform it to
 		// the sphere's local coordinate system from world coordinate system
 		ray bckRay = m_transformMatrix.apply(r, BCKTFRM);
@@ -75,6 +75,17 @@ namespace fRT {
 
 				// Return base colour
 				localColour = m_baseColour;
+
+				// Compute and store the uv coordinates for later use
+				double x = poi[0];
+				double y = poi[1];
+				double z = poi[2];
+
+				double u = atan2(sqrt(x * x + y * y), z) / PI;
+				double v = atan2(y, x) / PI;
+
+				m_uvPoint[0] = u;
+				m_uvPoint[1] = v;
 
 				return true;
 			}
