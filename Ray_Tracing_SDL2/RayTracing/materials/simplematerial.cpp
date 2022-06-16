@@ -19,11 +19,22 @@ namespace fRT {
 		vec3 spcColour{ 3 };
 
 		// Compute diffuse component
-		difColour = computeDiffuseColour(
-			objectList,
-			lightList,
-			record
-		);
+		if(not m_hasTexture) {
+			difColour = computeDiffuseColour(
+				objectList,
+				lightList,
+				record,
+				m_baseColour
+			);
+		}
+		else {
+			difColour = computeDiffuseColour(
+				objectList,
+				lightList,
+				record,
+				m_textureList.at(0)->getColour(record.obj->m_uvPoint)
+			);
+		}
 
 		// Compute the specular component
 		if(m_shininess > 0.0) {
@@ -51,8 +62,9 @@ namespace fRT {
 
 		// Combine specular component with final colour
 		matColour = matColour + spcColour;
-		double mx_val = fmax(fmax(matColour[0], matColour[1]), matColour[2]);
+		//double mx_val = fmax(fmax(matColour[0], matColour[1]), matColour[2]);
 		//matColour = (1 / mx_val) * matColour;
+		
 		return matColour;
 	}
 
@@ -127,5 +139,4 @@ namespace fRT {
 		spcColour[2] = green;
 		return spcColour;
 	}
-
 };

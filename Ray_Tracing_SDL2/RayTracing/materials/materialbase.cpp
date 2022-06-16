@@ -26,7 +26,8 @@ namespace fRT {
 	vec3 materialBase::computeDiffuseColour(
 		const std::vector<std::shared_ptr<objectBase>>& objectList,
 		const std::vector<std::shared_ptr<lightBase>>& lightList,
-		hitRecord& record
+		hitRecord& record,
+		const vec3& baseColour
 	) {
 		// Compute the colour due to diffuse illumination
 		vec3 diffuseColour{ 3 };
@@ -55,7 +56,6 @@ namespace fRT {
 
 		if(illumFound) {
 			// Set diffuse colour
-			vec3 baseColour = record.obj->m_baseColour;
 			diffuseColour[0] = red * baseColour[0];
 			diffuseColour[1] = green * baseColour[1];
 			diffuseColour[2] = blue * baseColour[2];
@@ -69,7 +69,7 @@ namespace fRT {
 	vec3 materialBase::computeReflectionColour(
 		const std::vector<std::shared_ptr<objectBase>>& objectList,
 		const std::vector<std::shared_ptr<lightBase>>& lightList,
-		hitRecord& record,
+		hitRecord record,
 		const ray& incidentRay,
 		int reflectionRayCount
 	) {
@@ -105,7 +105,7 @@ namespace fRT {
 			}
 			else {
 				matColour = materialBase::computeDiffuseColour(
-					objectList, lightList, closestIntersectionRec
+					objectList, lightList, closestIntersectionRec, closestIntersectionRec.obj->m_baseColour
 				);
 			}
 		}
@@ -155,5 +155,12 @@ namespace fRT {
 		}// Done checking object list for intersection
 
 		return intersectionFound;
+	}
+
+	// Function to assign a texture
+
+	void materialBase::assignTexture(const std::shared_ptr<texture::textureBase>& tex) {
+		m_textureList.push_back(tex);
+		m_hasTexture = true;
 	}
 };
