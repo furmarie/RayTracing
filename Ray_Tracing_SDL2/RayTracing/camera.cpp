@@ -78,6 +78,11 @@ namespace fRT {
 		return m_cameraHorzSize;
 	}
 
+	// Method to return camera vertical screen size
+	double camera::getVertSize() const {
+		return m_cameraVertSize;
+	}
+
 	// Method to return aspect ratio
 	double camera::getAspectRatio() const {
 		return m_cameraAspectRatio;
@@ -100,7 +105,9 @@ namespace fRT {
 
 	// Function to compute camera geometry
 	void camera::UpdateCameraGeometry() {
-	// First, compute the vector from the camera position to the LookAt position.
+		m_cameraVertSize = (m_cameraHorzSize / m_cameraAspectRatio);
+
+		// First, compute the vector from the camera position to the LookAt position.
 		m_alignmentVector = m_cameraLookAt - m_cameraPosition;
 		m_alignmentVector.Normalize();
 
@@ -115,7 +122,7 @@ namespace fRT {
 
 		// Modify the U and V vectors to match the size and aspect ratio.
 		m_projectionScreenU = m_projectionScreenU * m_cameraHorzSize;
-		m_projectionScreenV = m_projectionScreenV * (m_cameraHorzSize / m_cameraAspectRatio);
+		m_projectionScreenV = m_projectionScreenV * m_cameraVertSize;
 
 	}
 

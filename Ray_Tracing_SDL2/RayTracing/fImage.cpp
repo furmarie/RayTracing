@@ -1,4 +1,7 @@
 #include "fImage.hpp"
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 // Default constructor
 fImage::fImage() : m_xSize(0), m_ySize(0), m_pTexture(NULL) {};
@@ -108,12 +111,21 @@ void fImage::InitTexture() {
 	SDL_FreeSurface(temp_surface);
 }
 
+double clamp(double x, double mn, double mx) {
+	if(x < mn) x = mn;
+	if(x > mx) x = mx;
+	return x;
+}
+
 // Function to convert colour to Uint32
 Uint32 fImage::ConvertColour(const double red, const double green, const double blue) {
 	// Convert colours to unsigned chars
-	unsigned char ir = static_cast<unsigned char>((red / m_overallMax) * 255.0);
-	unsigned char ig = static_cast<unsigned char>((green / m_overallMax) * 255.0);
-	unsigned char ib = static_cast<unsigned char>((blue / m_overallMax) * 255.0);
+	//unsigned char ir = static_cast<unsigned char>((red / m_overallMax) * 255.0);
+	//unsigned char ig = static_cast<unsigned char>((green / m_overallMax) * 255.0);
+	//unsigned char ib = static_cast<unsigned char>((blue / m_overallMax) * 255.0);
+	unsigned char ir = static_cast<unsigned char>(clamp(red, 0.0, 0.999) * 256.0);
+	unsigned char ig = static_cast<unsigned char>(clamp(green, 0.0, 0.999) * 256.0);
+	unsigned char ib = static_cast<unsigned char>(clamp(blue, 0.0, 0.999) * 256.0);
 	unsigned char ia = 255;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -154,5 +166,43 @@ void fImage::computeMaxValues() {
 	ckmax(m_overallMax, m_maxRed);
 	ckmax(m_overallMax, m_maxGreen);
 	ckmax(m_overallMax, m_maxBlue);
+}
+
+bool fImage::saveImage() {
+		// Initialise texture
+	Uint32 r_mask, g_mask, b_mask, a_mask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	r_mask = 0xff000000;
+	g_mask = 0x00ff0000;
+	b_mask = 0x0000ff00;
+	a_mask = 0x000000ff;
+#else
+	r_mask = 0x000000ff;
+	g_mask = 0x0000ff00;
+	b_mask = 0x00ff0000;
+	a_mask = 0xff000000;
+#endif
+
+	auto t = std::time(nullptr);
+	struct tm now;
+	localtime_s(&now, &t);
+	std::stringstream ss;
+	ss << std::put_time(&now, "%d-%m-%Y_%H-%M-%S");
+	std::string file_name_ = "screenshots/" + ss.str() + ".bmp";
+	const char* file_name = file_name_.c_str();
+	SDL_Texture* target = SDL_GetRenderTarget(m_pRenderer);
+	SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+	int width, height;
+	SDL_QueryTexture(m_pTexture, NULL, NULL, &width, &height);
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, r_mask, g_mask, b_mask, a_mask);
+	SDL_RenderReadPixels(m_pRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+	//IMG_SavePNG(surface, file_name);
+	if(SDL_SaveBMP(surface, file_name) != 0) {
+		std::cerr << "Unable to save image!" << std::endl;
+		return false;
+	}
+	SDL_FreeSurface(surface);
+	SDL_SetRenderTarget(m_pRenderer, target);
+	return true;
 }
 

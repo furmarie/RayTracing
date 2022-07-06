@@ -5,6 +5,51 @@ namespace fRT {
 	simpleMaterial::~simpleMaterial() {}
 
 
+	// Function to get diffuse colour
+	vec3 simpleMaterial::getColour(
+		const std::vector<std::shared_ptr<objectBase>>& objectList,
+		const std::vector<std::shared_ptr<lightBase>>& lightList,
+		hitRecord& record,
+		const ray& cameraRay,
+		double& reflectivity
+	) {
+		vec3 difColour, spcColour;
+		if(not m_hasTexture) {
+			difColour = computeDiffuseColour(
+				objectList,
+				lightList,
+				record,
+				m_baseColour
+			);
+		}
+		else {
+			difColour = computeDiffuseColour(
+				objectList,
+				lightList,
+				record,
+				m_textureList.at(0)->getColour(record.obj->m_uvPoint)
+			);
+		}
+
+		// Compute the specular component
+		if(m_shininess > 0.0) {
+			spcColour = computeSpecular(
+				objectList,
+				lightList,
+				record,
+				cameraRay
+			);
+		}
+
+		// Compute colour components to return
+		vec3 res = spcColour + difColour * (1 - m_reflectivity);
+
+		// Return reflectivity of this material
+		reflectivity = m_reflectivity;
+
+		return res;
+	}
+
 	// Function to return the colour
 	vec3 simpleMaterial::computeColour(
 		const std::vector<std::shared_ptr<objectBase>>& objectList,
@@ -49,7 +94,7 @@ namespace fRT {
 		// Compute the reflective component
 		if(m_reflectivity > 0.0) {
 			refColour = computeReflectionColour(
-				objectList, 
+				objectList,
 				lightList,
 				record,
 				cameraRay,
@@ -64,7 +109,7 @@ namespace fRT {
 		matColour = matColour + spcColour;
 		//double mx_val = fmax(fmax(matColour[0], matColour[1]), matColour[2]);
 		//matColour = (1 / mx_val) * matColour;
-		
+
 		return matColour;
 	}
 
@@ -77,6 +122,9 @@ namespace fRT {
 	) {
 		vec3 spcColour{ 3 };
 		double red = 0, green = 0, blue = 0;
+		if(m_shininess == 0.0) {
+			return spcColour;
+		}
 
 		// Loop through all the lights in the scene
 		for(auto& currLight : lightList) {
@@ -113,30 +161,30 @@ namespace fRT {
 				if(validInt) {
 					break;
 				}
-
-				// Compute reflection vector
-				vec3 d = lightRay.m_AB;
-				vec3 r = d - (2 * vec3::dot(d, record.localNormal) * record.localNormal);
-				r.Normalize();
-
-				// Compute the dot product
-				vec3 v = cameraRay.m_AB;
-				v.Normalize();
-				double dotProduct = vec3::dot(r, v);
-
-				// Only proceed if dot product is positive
-				// i.e viewing angle and reflected ray are in same direction
-				if(dotProduct > 0.0) {
-					intensity = m_reflectivity * std::pow(dotProduct, m_shininess);
-				}
 			} // Done with object list
+
+			// Compute reflection vector
+			vec3 d = lightRay.m_AB;
+			vec3 r = d - (2 * vec3::dot(d, record.localNormal) * record.localNormal);
+			r.Normalize();
+
+			// Compute the dot product
+			vec3 v = cameraRay.m_AB;
+			v.Normalize();
+			double dotProduct = vec3::dot(r, v);
+
+			// Only proceed if dot product is positive
+			// i.e viewing angle and reflected ray are in same direction
+			if(dotProduct > 0.0) {
+				intensity = m_reflectivity * std::pow(dotProduct, m_shininess);
+			}
 			red += currLight->m_colour[0] * intensity;
 			green += currLight->m_colour[1] * intensity;
 			blue += currLight->m_colour[2] * intensity;
 		} // Done checking all lights
-		spcColour[0] = red;
-		spcColour[1] = blue;
-		spcColour[2] = green;
-		return spcColour;
+		//spcColour[0] = red;
+		//spcColour[1] = blue;
+		//spcColour[2] = green;
+		return vec3({ red, blue, green });
 	}
 };

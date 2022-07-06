@@ -34,13 +34,15 @@ namespace fRT {
 			const vec3& scale
 		);
 
-	// Functions to return transform matrices
+		// Functions to return transform matrices
 		matrix getForward();
 		matrix getBackward();
-
+		
 		// Function to apply the transform
 		ray apply(const ray& inputRay, bool dirFlag) const;
 		vec3 apply(const vec3& inputVec, bool dirFlag) const;
+		vec3 applyNorm(const vec3& inputVec) const;
+
 
 		// Overload operators
 		friend GTform operator* (const fRT::GTform& lhs, const fRT::GTform& rhs);

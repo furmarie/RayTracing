@@ -42,8 +42,17 @@ namespace fRT {
 			int reflectionRayCount
 		);
 
+		// Function to get colour components except reflective component
+		virtual vec3 getColour(
+			const std::vector<std::shared_ptr<objectBase>>& objectList,
+			const std::vector<std::shared_ptr<lightBase>>& lightList,
+			hitRecord& record,
+			const ray& cameraRay,
+			double& reflectivity
+		);
+
 		// Function to cast a ray into scene
-		bool castRay(
+		static bool castRay(
 			const ray& r,
 			const std::vector<std::shared_ptr<objectBase>>& objectList,
 			const std::shared_ptr<objectBase>& thisObj,

@@ -22,6 +22,9 @@ public:
 
 	void Display();
 
+	// Function to save an image
+	bool saveImage();
+
 	// Functions to get dimensions of image
 	int getxSize();
 	int getySize();

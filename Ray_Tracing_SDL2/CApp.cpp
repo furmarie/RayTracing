@@ -87,6 +87,28 @@ void CApp::OnEvent(SDL_Event* event) {
 	if(event->type == SDL_QUIT) {
 		isRunning = false;
 	}
+	if(event->type == SDL_KEYUP) {
+
+		switch(event->key.keysym.sym) {
+			case SDLK_UP: {
+				if(m_image.saveImage()) {
+					std::cerr << "Saved image!" << std::endl;
+				}
+				break;
+			}
+			case SDLK_SPACE: {
+				m_image.Display();
+				break;
+			}
+			case SDLK_ESCAPE: {
+				isRunning = false;
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
 }
 
 void CApp::OnLoop() {
@@ -125,3 +147,4 @@ void CApp::printVec(const qbVector<double>& vec) {
 	}
 	std::cout << std::endl;
 }
+

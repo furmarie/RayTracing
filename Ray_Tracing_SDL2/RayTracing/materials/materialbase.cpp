@@ -22,6 +22,20 @@ namespace fRT {
 		return matColour;
 	}
 
+	// Function to get colour of material without reflective component
+	vec3 materialBase::getColour(
+		const std::vector<std::shared_ptr<objectBase>>& objectList,
+		const std::vector<std::shared_ptr<lightBase>>& lightList,
+		hitRecord& record,
+		const ray& cameraRay,
+		double& reflectivity
+	) {
+		vec3 res{ vec3({1.0, 1.0, 0.0})};
+		reflectivity = 0.0;
+		return res;
+	}
+
+
 	// Function to compute diffuse colour
 	vec3 materialBase::computeDiffuseColour(
 		const std::vector<std::shared_ptr<objectBase>>& objectList,
@@ -73,7 +87,7 @@ namespace fRT {
 		const ray& incidentRay,
 		int reflectionRayCount
 	) {
-		vec3 reflectedColour {3};
+		vec3 reflectedColour{ 3 };
 
 		// Compute the reflection vector
 		vec3 d = incidentRay.m_AB;
@@ -81,7 +95,7 @@ namespace fRT {
 
 		// Construct the reflection ray
 		vec3 startPoint = record.intPoint;
-		ray reflectedRay (startPoint, startPoint + reflectedVector);
+		ray reflectedRay(startPoint, startPoint + reflectedVector);
 
 		// Cast this ray into the scene and find the closest object that it intersects with
 		hitRecord closestIntersectionRec;
@@ -94,7 +108,7 @@ namespace fRT {
 		);
 
 		// Compute illumination for closest object if there was a valid intersection
-		vec3 matColour {3};
+		vec3 matColour{ 3 };
 		if(intersectionFound and (reflectionRayCount < m_maxReflectionRays)) {
 			// Check if closest object has a material 
 			if(closestIntersectionRec.obj->m_hasMaterial) {
@@ -117,6 +131,7 @@ namespace fRT {
 		return reflectedColour;
 	}
 
+
 	// Function to cast a ray into the scene
 	bool materialBase::castRay(
 		const ray& r,
@@ -125,9 +140,9 @@ namespace fRT {
 		hitRecord& record
 	) {
 		// Test for intersections with all of the objects in the scene
-		vec3 intPoint {3};
-		vec3 localNormal {3};
-		vec3 localColour {3};
+		vec3 intPoint{ 3 };
+		vec3 localNormal{ 3 };
+		vec3 localColour{ 3 };
 
 		double minDist = 1e6;
 		bool intersectionFound = false;

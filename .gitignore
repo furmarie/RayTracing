@@ -364,3 +364,8 @@ FodyWeavers.xsd
 
 # All json files
 *.json
+
+*.bmp
+*.png
+*.jpg
+*.jpeg

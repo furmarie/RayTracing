@@ -36,6 +36,7 @@ namespace fRT {
 		qbVector<double> getScreenCentre() const;
 		double getFocalLength() const;
 		double getHorzSize() const;
+		double getVertSize() const;
 		double getAspectRatio() const;
 
 		// Function to generate a ray
@@ -51,6 +52,7 @@ namespace fRT {
 		double			 m_cameraFocalLength;
 		double			 m_cameraHorzSize;  // Width
 		double			 m_cameraAspectRatio; // Width / Height
+		double			 m_cameraVertSize;  // Height
 
 		qbVector<double> m_alignmentVector{ 3 };
 		qbVector<double> m_projectionScreenU{ 3 };

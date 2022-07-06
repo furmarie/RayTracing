@@ -67,10 +67,15 @@ public:
 	// Overloaded operators.
 	qbVector<T> operator+ (const qbVector<T>& rhs) const;
 	qbVector<T> operator- (const qbVector<T>& rhs) const;
+	qbVector<T> operator- () const;
 	qbVector<T> operator* (const T& rhs) const;
 	qbVector<T> operator* (const qbVector<T>& rhs) const;
 	T& operator[] (const size_t idx);
 	T  operator[] (const size_t idx) const;
+	void operator += (const qbVector<T>& rhs);
+	void operator -= (const qbVector<T>& rhs);
+	void operator *= (const qbVector<T>& rhs);
+	void operator *= (const T& rhs);
 
 	// Friend functions.
 	template <class U> friend qbVector<U> operator* (const U& lhs, const qbVector<U>& rhs);
@@ -212,6 +217,11 @@ qbVector<T> qbVector<T>::operator- (const qbVector<T>& rhs) const {
 	return result;
 }
 
+template<class T>
+qbVector<T> qbVector<T>::operator- () const {
+	return -1 * this;
+}
+
 template <class T>
 T& qbVector<T>::operator[] (const size_t idx) {
 	if(idx < 0 or idx >= m_nDims) {
@@ -251,6 +261,46 @@ qbVector<T> qbVector<T>::operator*(const qbVector<T>& rhs) const {
 
 	qbVector<T> result(resultData);
 	return result;
+}
+
+template<class T>
+void qbVector<T>::operator+=(const qbVector<T>& rhs) {
+	if(m_nDims != rhs.m_nDims) {
+		throw std::invalid_argument("Vector dimensions do not match.");
+	}
+	for(int i = 0; i < m_nDims; i++) {
+		m_vectorData[i] += rhs.GetElement(i);
+	}
+}
+
+template<class T>
+void qbVector<T>::operator-=(const qbVector<T>& rhs) {
+	if(m_nDims != rhs.m_nDims) {
+		throw std::invalid_argument("Vector dimensions do not match.");
+	}
+	for(int i = 0; i < m_nDims; i++) {
+		m_vectorData[i] -= rhs.GetElement(i);
+	}
+}
+
+template<class T>
+void qbVector<T>::operator*=(const qbVector<T>& rhs) {
+	if(m_nDims != rhs.m_nDims) {
+		throw std::invalid_argument("Vector dimensions do not match.");
+	}
+	for(int i = 0; i < m_nDims; i++) {
+		m_vectorData[i] *= rhs.GetElement(i);
+	}
+}
+
+template<class T>
+void qbVector<T>::operator*=(const T& rhs) {
+	if(m_nDims != rhs.m_nDims) {
+		throw std::invalid_argument("Vector dimensions do not match.");
+	}
+	for(int i = 0; i < m_nDims; i++) {
+		m_vectorData[i] *= rhs;
+	}
 }
 
 

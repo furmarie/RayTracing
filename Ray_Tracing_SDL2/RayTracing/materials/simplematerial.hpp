@@ -19,13 +19,23 @@ namespace fRT {
 			const ray& cameraRay,
 			int reflectionRayCount
 		) override;
-	// Function to compute specular highlights
+
+		// Function to compute specular highlights
 		vec3 computeSpecular(
 			const std::vector<std::shared_ptr<objectBase>>& objectList,
 			const std::vector<std::shared_ptr<lightBase>>& lightList,
 			hitRecord& record,
 			const ray& cameraRay
 		);
+
+		// Function to get colour components except reflective component
+		virtual vec3 getColour(
+			const std::vector<std::shared_ptr<objectBase>>& objectList,
+			const std::vector<std::shared_ptr<lightBase>>& lightList,
+			hitRecord& record,
+			const ray& cameraRay,
+			double& reflectivity
+		) override;
 
 	public:
 		vec3 m_baseColour{ {1.0, 0.0, 1.0} };
