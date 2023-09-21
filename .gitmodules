@@ -1,0 +1,6 @@
+[submodule "Quartic"]
+	url = https://github.com/sasamil/Quartic.git
+	path = Ray_Tracing_SDL2/RayTracing/primitives/Quartic/
+[submodule "Ray_Tracing_SDL2/RayTracing/primitives/Quartic"]
+	path = Ray_Tracing_SDL2/RayTracing/primitives/Quartic
+	url = https://github.com/sasamil/Quartic.git
